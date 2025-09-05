@@ -60,12 +60,15 @@ h1 {
   font-size: 2.5em;
 }
 .result {
-  margin-top: 50px;
+  margin-top: 50px; /* gap from loading line */
   font-size: 3em;
   font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .result span:first-child { color: #00796b; }
-.result .day { color: black; }
+.result .day { color: black; margin-top: 20px; } /* gap below line */
 .hidden { display: none; }
 
 /* Bubbles */
@@ -97,7 +100,10 @@ h1 {
     <p class="day">Saturday</p>
   </div>
   <div id="loadingBox" class="loading hidden"></div>
-  <p id="result" class="result hidden"><span>Your next predicted day is: </span><span class="day"></span></p>
+  <p id="result" class="result hidden">
+    <span>Your next predicted day is:</span>
+    <span class="day"></span>
+  </p>
 </div>
 
 <script>
@@ -127,14 +133,14 @@ const funnyLines = [
 
 const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
-// Generate bubbles
-for(let i=0;i<35;i++){
+// Generate only 6-7 big bubbles, spaced nicely
+for(let i=0;i<7;i++){
   const b=document.createElement("div");
   b.className="bubble";
-  b.style.width=b.style.height=(25+Math.random()*50)+"px";
-  b.style.left=Math.random()*100+"vw";
-  b.style.animationDuration=(6+Math.random()*6)+"s";
-  b.style.animationDelay=(Math.random()*6)+"s";
+  b.style.width=b.style.height=(100+Math.random()*100)+"px";
+  b.style.left=(10+i*12)+"vw"; // spaced horizontally
+  b.style.animationDuration=(6+Math.random()*4)+"s";
+  b.style.animationDelay=(Math.random()*3)+"s";
   document.body.appendChild(b);
 }
 
@@ -159,72 +165,6 @@ document.querySelectorAll(".day").forEach(day => {
       if(i>=funnyLines.length){
         clearInterval(interval);
 
-        let index = days.indexOf(selected);
-        let nextDay = days[(index+1)%days.length];
-        setTimeout(()=>{
-          loadingBox.classList.add("hidden");
-          resultDay.innerText = nextDay;
-          result.classList.remove("hidden");
-        },500);
-      }
-    },1000);
-  });
-});
-</script>
-</body>
-</html></div>
-
-<script>
-const chooseLine = document.getElementById("chooseLine");
-const daysList = document.getElementById("daysList");
-const loadingBox = document.getElementById("loadingBox");
-const result = document.getElementById("result");
-const resultDay = result.querySelector(".day");
-
-const funnyLines = [
-  "Asking info from aliens...",
-  "Checking Amazon free impossible gifts...",
-  "Contacting Rohit Mehra from Koi Mil Gaya...",
-  "Searching Swiggy's comment...",
-  "Billo bagge billiya da ki karegi..."
-];
-
-const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-
-// Generate bubbles
-for(let i=0;i<25;i++){
-  const b=document.createElement("div");
-  b.className="bubble";
-  b.style.width=b.style.height=(20+Math.random()*30)+"px";
-  b.style.left=Math.random()*100+"vw";
-  b.style.animationDuration=(5+Math.random()*5)+"s";
-  b.style.animationDelay=(Math.random()*5)+"s";
-  document.body.appendChild(b);
-}
-
-chooseLine.addEventListener("click", () => {
-  daysList.classList.toggle("hidden");
-});
-
-document.querySelectorAll(".day").forEach(day => {
-  day.addEventListener("click", () => {
-    const selected = day.innerText;
-    chooseLine.innerText = `Predictions are being made for ${selected}`;
-    daysList.classList.add("hidden");
-
-    // Start funny loading
-    loadingBox.classList.remove("hidden");
-    result.classList.add("hidden");
-    loadingBox.innerText = "";
-    let i = 0;
-
-    const interval = setInterval(() => {
-      loadingBox.innerText = funnyLines[i];
-      i++;
-      if(i>=funnyLines.length){
-        clearInterval(interval);
-
-        // Show result
         let index = days.indexOf(selected);
         let nextDay = days[(index+1)%days.length];
         setTimeout(()=>{
