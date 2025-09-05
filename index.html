@@ -16,68 +16,64 @@ body {
   position: relative;
 }
 .container {
-  background: rgba(255,255,255,0.9);
-  padding: 50px;
+  background: rgba(255,255,255,0.95);
+  padding: 60px;
   border-radius: 25px;
   text-align: center;
   width: 90vw;
   max-width: 700px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  position: relative;
+  z-index: 10;
 }
 h1 {
-  font-size: 3em;
+  font-size: 4em;
   color: #2c3e50;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 .choose {
   background: #00796b;
   color: white;
-  padding: 20px;
-  border-radius: 15px;
+  padding: 25px;
+  border-radius: 20px;
   cursor: pointer;
-  font-size: 2em;
+  font-size: 3em;
   transition: 0.3s;
 }
-.choose:hover {
-  background: #004d40;
-}
-.days {
-  margin-top: 20px;
-}
+.choose:hover { background: #004d40; }
+.days { margin-top: 20px; }
 .day {
   background: #e0f2f1;
-  margin: 10px 0;
-  padding: 15px;
-  border-radius: 15px;
+  margin: 15px 0;
+  padding: 20px;
+  border-radius: 20px;
   cursor: pointer;
-  font-size: 2em;
+  font-size: 2.5em;
   transition: 0.2s;
 }
-.day:hover {
-  background: #b2dfdb;
-}
+.day:hover { background: #b2dfdb; }
 .loading {
-  margin-top: 30px;
+  margin-top: 50px;
   font-style: italic;
   color: #444;
-  min-height: 40px;
-  font-size: 2em;
+  min-height: 50px;
+  font-size: 2.5em;
 }
 .result {
-  margin-top: 30px;
-  font-size: 2.5em;
+  margin-top: 50px;
+  font-size: 3em;
   font-weight: bold;
 }
-.result .day {
-  color: black;
-}
+.result span:first-child { color: #00796b; }
+.result .day { color: black; }
 .hidden { display: none; }
 
 /* Bubbles */
 .bubble {
   position: absolute;
   border-radius: 50%;
-  opacity: 0.4;
+  opacity: 0.25;
+  z-index: 1;
   animation: floatUp linear infinite;
   background: #a8e6a3;
 }
@@ -103,6 +99,80 @@ h1 {
   <div id="loadingBox" class="loading hidden"></div>
   <p id="result" class="result hidden"><span>Your next predicted day is: </span><span class="day"></span></p>
 </div>
+
+<script>
+const chooseLine = document.getElementById("chooseLine");
+const daysList = document.getElementById("daysList");
+const loadingBox = document.getElementById("loadingBox");
+const result = document.getElementById("result");
+const resultDay = result.querySelector(".day");
+
+const funnyLines = [
+  "Making tea for productivity boost...",
+  "Checking if your socks match today...",
+  "Finding missing keys under the sofa...",
+  "Waiting for WiFi to stop acting up...",
+  "Asking the cat for life advice...",
+  "Searching fridge for forgotten snacks...",
+  "Trying to remember what you came for...",
+  "Listening to your own playlist again...",
+  "Counting how many notifications you ignored...",
+  "Pretending to work while actually browsing memes...",
+  "Checking weather to avoid getting wet...",
+  "Scrolling through messages you won’t reply...",
+  "Making plans that you might cancel...",
+  "Thinking about taking a short nap...",
+  "Trying to look busy while doing nothing..."
+];
+
+const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+// Generate bubbles
+for(let i=0;i<35;i++){
+  const b=document.createElement("div");
+  b.className="bubble";
+  b.style.width=b.style.height=(25+Math.random()*50)+"px";
+  b.style.left=Math.random()*100+"vw";
+  b.style.animationDuration=(6+Math.random()*6)+"s";
+  b.style.animationDelay=(Math.random()*6)+"s";
+  document.body.appendChild(b);
+}
+
+chooseLine.addEventListener("click", () => {
+  daysList.classList.toggle("hidden");
+});
+
+document.querySelectorAll(".day").forEach(day => {
+  day.addEventListener("click", () => {
+    const selected = day.innerText;
+    chooseLine.innerText = `Predictions are being made for ${selected}`;
+    daysList.classList.add("hidden");
+
+    loadingBox.classList.remove("hidden");
+    result.classList.add("hidden");
+    loadingBox.innerText = "";
+    let i = 0;
+
+    const interval = setInterval(() => {
+      loadingBox.innerText = funnyLines[i];
+      i++;
+      if(i>=funnyLines.length){
+        clearInterval(interval);
+
+        let index = days.indexOf(selected);
+        let nextDay = days[(index+1)%days.length];
+        setTimeout(()=>{
+          loadingBox.classList.add("hidden");
+          resultDay.innerText = nextDay;
+          result.classList.remove("hidden");
+        },500);
+      }
+    },1000);
+  });
+});
+</script>
+</body>
+</html></div>
 
 <script>
 const chooseLine = document.getElementById("chooseLine");
