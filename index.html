@@ -60,7 +60,7 @@ h1 {
   font-size: 2.5em;
 }
 .result {
-  margin-top: 100px; /* gap from loading line */
+  margin-top: 50px; /* gap from loading line */
   font-size: 3em;
   font-weight: bold;
   display: flex;
@@ -68,7 +68,7 @@ h1 {
   align-items: center;
 }
 .result span:first-child { color: #00796b; }
-.result .day { color: black; margin-top: 50px; } /* gap below line */
+.result .day { color: black; margin-top: 40px; } /* gap below line */
 .hidden { display: none; }
 
 /* Bubbles */
@@ -88,8 +88,8 @@ h1 {
 </head>
 <body>
 <div class="container">
-  <h1>Predict About Any Day</h1>
-  <p id="chooseLine" class="choose">Tap here to choose</p>
+  <h1>Predict The Next Day</h1>
+  <p id="chooseLine" class="choose">Tap to start 🚰</p>
   <div id="daysList" class="days hidden">
     <p class="day">Sunday</p>
     <p class="day">Monday</p>
@@ -120,6 +120,7 @@ const funnyLines = [
   "Searching Swiggy's comment...",
   "Analyzing WhatsApp group memes...",
   "Scrolling reels for 10 hours daily...",
+  "Begging free dhaniya from sabji wale bhaiya",
   "Billo bagge billiya da ki karegi..."
 ];
 
@@ -143,7 +144,7 @@ chooseLine.addEventListener("click", () => {
 document.querySelectorAll(".day").forEach(day => {
   day.addEventListener("click", () => {
     const selected = day.innerText;
-    chooseLine.innerText = `Predictions are being made for ${selected}`;
+    chooseLine.innerText = `Predicting next day ${selected}`;
     daysList.classList.add("hidden");
 
     loadingBox.classList.remove("hidden");
